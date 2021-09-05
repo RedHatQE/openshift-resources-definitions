@@ -1,10 +1,6 @@
-import ast
-import os
-import re
 import shlex
 import subprocess
 import json
-import sys
 
 
 def resources_dict_from_api_resources():
