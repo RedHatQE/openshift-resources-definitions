@@ -26,5 +26,8 @@ def resources_dict_from_api_resources():
 
 
 if __name__ == "__main__":
-    with open("resources_definitions.json", "w") as fd:
-        fd.write(json.dumps(resources_dict_from_api_resources()))
+    with open("resources_definitions.json", "r+") as fd:
+        data = json.loads(fd.read())
+        new_data = resources_dict_from_api_resources()
+        data.update(new_data)
+        fd.write(json.dumps(data))
