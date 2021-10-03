@@ -1,6 +1,7 @@
 import shlex
 import subprocess
 import json
+from json import JSONDecodeError
 
 
 def resources_dict_from_api_resources():
@@ -26,8 +27,14 @@ def resources_dict_from_api_resources():
 
 
 if __name__ == "__main__":
-    with open("resources_definitions.json", "r+") as fd:
-        data = json.loads(fd.read())
+    data_file = "resources_definitions.json"
+    with open(data_file, "r") as fd_read:
+        try:
+            data = json.loads(fd_read.read())
+        except JSONDecodeError:
+            data = {}
+
+    with open(data_file, "w") as fd_write:
         new_data = resources_dict_from_api_resources()
         data.update(new_data)
-        fd.write(json.dumps(data))
+        fd_write.write(json.dumps(data))
