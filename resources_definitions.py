@@ -5,6 +5,14 @@ from json import JSONDecodeError
 
 
 def resources_dict_from_api_resources():
+    """
+    Build dict with resources and matched values.
+    Output example for resource:
+    {
+        'api_version': 'networking.k8s.io/v1',
+        'api_group': {'config.openshift.io': 'false', 'networking.k8s.io': 'true'}}
+    }
+    """
     resources_dict = {}
     api_resources = subprocess.check_output(
         shlex.split("oc api-resources --no-headers")
@@ -19,9 +27,9 @@ def resources_dict_from_api_resources():
 
         split_api_version = api_version.split("/")
         api_group = split_api_version[0] if len(split_api_version) > 1 else None
-        resources_dict.setdefault(kind, {}).update({"namespaced": namespaced})
-        resources_dict.setdefault(kind, {}).update({"api_version": api_version})
-        resources_dict[kind].setdefault("api_group", []).append(api_group)
+        resources_dict.setdefault(kind, {})
+        resources_dict[kind]["api_version"] = split_api_version[-1]
+        resources_dict[kind].setdefault("api_group", {}).update({api_group: namespaced})
 
     return resources_dict
 
