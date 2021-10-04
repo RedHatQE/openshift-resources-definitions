@@ -27,9 +27,10 @@ def resources_dict_from_api_resources():
 
         split_api_version = api_version.split("/")
         api_group = split_api_version[0] if len(split_api_version) > 1 else None
-        resources_dict.setdefault(kind, {})
-        resources_dict[kind]["api_version"] = split_api_version[-1]
-        resources_dict[kind].setdefault("api_group", {}).update({api_group: namespaced})
+        resources_dict.setdefault(kind, {}).setdefault("api_group", {})
+        resources_dict[kind]["api_group"].update({api_group: {}})
+        resources_dict[kind]["api_group"][api_group]["namespaced"] = namespaced
+        resources_dict[kind]["api_group"][api_group]["api_version"]= split_api_version[-1]
 
     return resources_dict
 
